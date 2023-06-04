@@ -1,7 +1,7 @@
-const { REST, Routes } = require('discord.js');
-const { clientId, guildId, token } = require('./config.json');
+const { REST, Routes } = require("discord.js");
+const { clientId, guildId, token } = require("./config.json");
 
-const commandsCollection = require('./command-builder.js');
+const commandsCollection = require("./command-builder.js");
 const commands = [];
 for (const command of commandsCollection.values()) {
     commands.push(command.data.toJSON());
