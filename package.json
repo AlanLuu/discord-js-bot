@@ -1,0 +1,16 @@
+{
+  "name": "random-discord-js-bot",
+  "version": "1.0.0",
+  "description": "Random discord.js bot",
+  "main": "index.js",
+  "scripts": {
+    "deploy-commands": "node deploy-commands.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alan Luu",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.11.0"
+  }
+}
