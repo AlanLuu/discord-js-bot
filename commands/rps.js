@@ -34,7 +34,7 @@ module.exports = {
         //Only allow the original interaction user to respond
         const isOriginalInteractionUser = i => i.user.id === interaction.user.id;
 
-        const playRps = async playerChoice => {
+        const playRps = async (confirmation, playerChoice) => {
             const choices = ["rock", "paper", "scissors"];
             const computerChoice = choices[Math.floor(Math.random() * choices.length)];
             let replyStr = `You chose **${playerChoice}**! I chose **${computerChoice}**!\n`;
@@ -57,7 +57,7 @@ module.exports = {
                 };
                 replyStr += `You ${winLose[playerChoice][computerChoice] ? "win" : "lose"}!`;
             }
-            await interaction.editReply({
+            await confirmation.update({
                 content: replyStr,
                 components: []
             });
@@ -67,7 +67,7 @@ module.exports = {
                 filter: isOriginalInteractionUser,
                 time: 15 * 1000
             });
-            await playRps(confirmation.customId);
+            await playRps(confirmation, confirmation.customId);
         } catch (e) {
             await interaction.editReply({
                 content: "Sorry, you took too long to respond!",
