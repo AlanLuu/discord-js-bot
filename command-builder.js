@@ -11,7 +11,7 @@ for (const fileName of commandFileNames) {
     if ("data" in command && "execute" in command) {
         commands.set(command.data.name, command);
     } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        console.log(`[WARNING] The command at ${fullFilePath} is missing a required "data" or "execute" property.`);
     }
 }
 
