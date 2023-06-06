@@ -4,6 +4,7 @@
   "description": "Random discord.js bot",
   "main": "index.js",
   "scripts": {
+    "delete-commands": "node delete-commands.js",
     "deploy-commands": "node deploy-commands.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
