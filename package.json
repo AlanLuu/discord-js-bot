@@ -1,5 +1,5 @@
 {
-  "name": "random-discord-js-bot",
+  "name": "discord-js-bot",
   "version": "1.0.0",
   "description": "Random discord.js bot",
   "main": "index.js",

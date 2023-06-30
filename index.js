@@ -16,7 +16,7 @@ client.commands = require("./command-builder.js");
 
 client.on(Events.MessageCreate, async message => {
     if (message.mentions.has(client.user)) {
-        await message.reply(`Hello ${message.author}!`);
+        await message.reply(`Hello ${message.author}`);
     }
 });
 

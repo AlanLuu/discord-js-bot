@@ -13,7 +13,10 @@ module.exports = {
             .split(",")
             .map(item => item.trim());
         if (list.length <= 1) {
-            await interaction.reply(`${interaction.user}, you only gave me one item to choose from!`);
+            await interaction.reply({
+                content: `You only gave me one item to choose from!`,
+                ephemeral: true
+            });
             return;
         }
         const pick = list[Math.floor(Math.random() * list.length)];
