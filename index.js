@@ -9,7 +9,11 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, client => {
-    console.log(`Logged in successfully as ${client.user.tag}`);
+    const timestamp = new Date().toLocaleString(undefined, {
+        dateStyle: "medium",
+        timeStyle: "long"
+    });
+    console.log(`[${timestamp}] Logged in successfully as ${client.user.tag}`);
 });
 
 client.commands = require("./command-builder.js");
