@@ -29,7 +29,10 @@ module.exports = {
             "My reply is no.",
             "My sources say no...",
             "Outlook not so good...",
-            "Very doubtful."
+            "Very doubtful.",
+            "No.",
+            "Absolutely not.",
+            "Do not even think about it."
         ];
         const input = interaction.options.getString("question");
         const response = responses[Math.floor(Math.random() * responses.length)];
