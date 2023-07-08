@@ -1,5 +1,6 @@
 const { Client, Events, GatewayIntentBits } = require("discord.js");
-const { token } = require("./config.json");
+const { devIds: devIdArr, token } = require("./config.json");
+const devIds = new Set(devIdArr); //Convert to a set for faster lookup times
 
 const client = new Client({
     intents: [
@@ -19,8 +20,18 @@ client.once(Events.ClientReady, client => {
 client.commands = require("./command-builder.js");
 
 client.on(Events.MessageCreate, async message => {
-    if (message.mentions.has(client.user)) {
-        await message.reply(`Hello ${message.author}`);
+    if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
+        const messageContent = message.content.toLowerCase();
+        if (messageContent.includes("ping")) {
+            await message.reply({
+                content: "Pong!",
+                allowedMentions: {
+                    repliedUser: false
+                }
+            });
+        } else {
+            await message.reply(`Hello ${message.author}`);
+        }
     }
 });
 
