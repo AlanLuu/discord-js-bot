@@ -18,7 +18,7 @@ cp config-example.json config.json
 
 `config.json` values:
 - `token: string` Bot token
-- `clientId: string` Bot client ID, necessary for registering the bot's slash commands.
+- `applicationId: string` Bot application ID, necessary for registering the bot's slash commands.
 - `devIds: string[]` Array of user IDs that are considered to be developers; only these users will be able to use any bot commands/features that are meant for developers only. This array can be left empty, in which case no user will be able to use any developer-specific commands/features.
 - `guildId: string` ID of the guild to register the bot's slash commands in when the command to do so is ran. This can be left empty, in which case the bot's slash commands will be registered in all guilds the bot is in.
 

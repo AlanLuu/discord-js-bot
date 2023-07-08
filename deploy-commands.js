@@ -1,5 +1,5 @@
 const { REST, Routes } = require("discord.js");
-const { clientId, guildId, token } = require("./config.json");
+const { applicationId, guildId, token } = require("./config.json");
 
 const commandsCollection = require("./command-builder.js");
 const commands = [];
@@ -13,7 +13,7 @@ const rest = new REST().setToken(token);
         if (guildId) {
             console.log(`Started deploying ${commands.length} application (/) commands to guild ${guildId}.`);
             const data = await rest.put(
-                Routes.applicationGuildCommands(clientId, guildId),
+                Routes.applicationGuildCommands(applicationId, guildId),
                 {
                     body: commands
                 },
@@ -22,7 +22,7 @@ const rest = new REST().setToken(token);
         } else {
             console.log(`Started deploying ${commands.length} application (/) commands.`);
             const data = await rest.put(
-                Routes.applicationCommands(clientId),
+                Routes.applicationCommands(applicationId),
                 {
                     body: commands
                 },

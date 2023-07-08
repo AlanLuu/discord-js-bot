@@ -1,5 +1,5 @@
 const { REST, Routes } = require("discord.js");
-const { clientId, guildId, token } = require("./config.json");
+const { applicationId, guildId, token } = require("./config.json");
 
 const rest = new REST().setToken(token);
 (async () => {
@@ -7,7 +7,7 @@ const rest = new REST().setToken(token);
         if (guildId) {
             console.log(`Started deleting all application (/) commands from guild ${guildId}.`);
             await rest.put(
-                Routes.applicationGuildCommands(clientId, guildId),
+                Routes.applicationGuildCommands(applicationId, guildId),
                 {
                     body: []
                 },
@@ -16,7 +16,7 @@ const rest = new REST().setToken(token);
         } else {
             console.log("Started deleting all application (/) commands.");
             await rest.put(
-                Routes.applicationCommands(clientId),
+                Routes.applicationCommands(applicationId),
                 {
                     body: []
                 },
