@@ -52,16 +52,14 @@ client.on(Events.InteractionCreate, async interaction => {
         await command.execute(interaction);
     } catch (e) {
         console.error(e);
+        const errorNoticeOptions = {
+            content: "There was an error while executing this command. If this issue persists, please contact the bot developer.",
+            ephemeral: true
+        };
         if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({
-                content: "There was an error while executing this command!",
-                ephemeral: true
-            });
+            await interaction.followUp(errorNoticeOptions);
         } else {
-            await interaction.reply({
-                content: "There was an error while executing this command!",
-                ephemeral: true
-            });
+            await interaction.reply(errorNoticeOptions);
         }
     }
 });
