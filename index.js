@@ -20,18 +20,22 @@ client.once(Events.ClientReady, client => {
 client.commands = require("./command-builder.js");
 
 client.on(Events.MessageCreate, async message => {
-    if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
-        const messageContent = message.content.toLowerCase();
-        if (messageContent.includes("ping")) {
-            await message.reply({
-                content: "Pong!",
-                allowedMentions: {
-                    repliedUser: false
-                }
-            });
-        } else {
-            await message.reply(`Hello ${message.author}`);
+    try {
+        if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
+            const messageContent = message.content.toLowerCase();
+            if (messageContent.includes("ping")) {
+                await message.reply({
+                    content: "Pong!",
+                    allowedMentions: {
+                        repliedUser: false
+                    }
+                });
+            } else {
+                await message.reply(`Hello ${message.author}`);
+            }
         }
+    } catch (e) {
+        console.error(e);
     }
 });
 
