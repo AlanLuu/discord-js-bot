@@ -7,7 +7,7 @@ module.exports = {
     async execute(interaction) {
         const abort = async debugInfo => {
             console.log(debugInfo);
-            await interaction.reply("Sorry, I couldn't get a dad joke. :(");
+            await interaction.replyWithoutPing("Sorry, I couldn't get a dad joke. :(");
         };
 
         const apiURL = "https://icanhazdadjoke.com/";
@@ -27,6 +27,6 @@ module.exports = {
             return;
         }
 
-        await interaction.reply(json.joke);
+        await interaction.replyWithoutPing(json.joke);
     }
 };

@@ -1,13 +1,33 @@
 const { Client, Events, GatewayIntentBits } = require("discord.js");
-const { devIds: devIdArr, token } = require("./config.json");
+const { devIds: devIdArr, prefix, token } = require("./config.json");
 const devIds = new Set(devIdArr); //Convert to a set for faster lookup times
 
+const intents = [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages
+];
+if (prefix) intents.push(GatewayIntentBits.MessageContent);
+
 const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages
-    ]
+    intents: intents
 });
+
+const commandErrorMsg = "There was an error while executing this command. " +
+    "If this issue persists, please contact the bot developer.";
+
+const replyWithoutPing = event => async options => {
+    const optionsObject = {
+        allowedMentions: {
+            repliedUser: false
+        }
+    };
+    if (typeof options === "string") {
+        optionsObject.content = options;
+    } else {
+        Object.assign(optionsObject, options);
+    }
+    await event.reply(optionsObject);
+};
 
 client.once(Events.ClientReady, client => {
     const timestamp = new Date().toLocaleString(undefined, {
@@ -20,22 +40,32 @@ client.once(Events.ClientReady, client => {
 client.commands = require("./command-builder.js");
 
 client.on(Events.MessageCreate, async message => {
+    message.replyWithoutPing = replyWithoutPing(message);
     try {
-        if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
+        if (prefix && message.content.startsWith(prefix)) {
+            const messageContent = message.content
+                .slice(prefix.length)
+                .trim();
+            const args = messageContent.split(/ +/);
+            const command = message.client.commands.get(args.shift().toLowerCase());
+            if (command) {
+                await command.execute(message, {
+                    argsArr: args,
+                    argsStr: args.join(" "),
+                    prefix: prefix
+                });
+            }
+        } else if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
             const messageContent = message.content.toLowerCase();
             if (messageContent.includes("ping")) {
-                await message.reply({
-                    content: "Pong!",
-                    allowedMentions: {
-                        repliedUser: false
-                    }
-                });
+                await message.replyWithoutPing("Pong!");
             } else {
                 await message.reply(`Hello ${message.author}`);
             }
         }
     } catch (e) {
         console.error(e);
+        await message.replyWithoutPing(commandErrorMsg);
     }
 });
 
@@ -48,12 +78,13 @@ client.on(Events.InteractionCreate, async interaction => {
         return;
     }
 
+    interaction.replyWithoutPing = replyWithoutPing(interaction);
     try {
         await command.execute(interaction);
     } catch (e) {
         console.error(e);
         const errorNoticeOptions = {
-            content: "There was an error while executing this command. If this issue persists, please contact the bot developer.",
+            content: commandErrorMsg,
             ephemeral: true
         };
         if (interaction.replied || interaction.deferred) {

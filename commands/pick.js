@@ -8,19 +8,30 @@ module.exports = {
             option.setName("list")
                 .setDescription("A comma-separated list of items to choose from.")
                 .setRequired(true)),
-    async execute(interaction) {
-        const list = interaction.options.getString("list")
+    async execute(interaction, { argsStr, prefix } = {}) {
+        if (argsStr?.length === 0) {
+            await interaction.replyWithoutPing({
+                content: `Usage: ${prefix}pick <item1>, <item2>, ...`,
+                ephemeral: true
+            });
+            return;
+        }
+        const list = (argsStr ?? interaction.options.getString("list"))
             .split(",")
             .map(item => item.trim());
         if (list.length <= 1) {
-            await interaction.reply({
-                content: `You only gave me one item to choose from!`,
+            await interaction.replyWithoutPing({
+                content: `You only gave me one item to choose from.`,
                 ephemeral: true
             });
             return;
         }
         const pick = list[Math.floor(Math.random() * list.length)];
         const listStr = list.join(", ");
-        await interaction.reply(`${interaction.user}'s choices: **[${listStr}]**\nI randomly picked: **${pick}**`);
+        if (argsStr) {
+            await interaction.replyWithoutPing(`I randomly picked: **${pick}**`);
+        } else {
+            await interaction.replyWithoutPing(`Choices: **[${listStr}]**\nI randomly picked: **${pick}**`);
+        }
     }
 };

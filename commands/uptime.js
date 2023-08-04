@@ -19,6 +19,6 @@ module.exports = {
         if (hours > 0) uptimeStr += `${hours} hours, `;
         if (minutes > 0) uptimeStr += `${minutes} minutes, `;
         uptimeStr += `${seconds} seconds**`;
-        await interaction.reply(uptimeStr);
+        await interaction.replyWithoutPing(uptimeStr);
     }
 };

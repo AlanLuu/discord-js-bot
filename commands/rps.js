@@ -9,7 +9,9 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("rps")
         .setDescription("Play a game of rock, paper, scissors!"),
-    async execute(interaction) {
+    async execute(interaction, prefixCommandOptions) {
+        const rpsPlayer = prefixCommandOptions ? interaction.author : interaction.user;
+
         const rock = new ButtonBuilder()
             .setCustomId("rock")
             .setLabel("Rock")
@@ -22,17 +24,16 @@ module.exports = {
             .setCustomId("scissors")
             .setLabel("Scissors")
             .setStyle(ButtonStyle.Primary);
-        
         const row = new ActionRowBuilder()
             .addComponents(rock, paper, scissors);
         
         const response = await interaction.reply({
-            content: `${interaction.user}, Choose your weapon!`,
+            content: `${rpsPlayer}, Choose your weapon!`,
             components: [row]
         });
 
         //Only allow the original interaction user to respond
-        const isOriginalInteractionUser = i => i.user.id === interaction.user.id;
+        const isOriginalInteractionUser = i => i.user.id === rpsPlayer.id;
 
         const playRps = async (confirmation, playerChoice) => {
             const choices = ["rock", "paper", "scissors"];
@@ -69,10 +70,18 @@ module.exports = {
             });
             await playRps(confirmation, confirmation.customId);
         } catch (e) {
-            await interaction.editReply({
-                content: "Sorry, you took too long to respond!",
-                components: []
-            });
+            try {
+                await interaction.editReply({
+                    content: "Sorry, you took too long to respond.",
+                    components: []
+                });
+            } catch (e) {
+                //If the original interaction has been deleted, we can't edit it
+                await interaction.channel.send({
+                    content: `Sorry ${rpsPlayer}, you took too long to respond to your rps command.`,
+                    components: []
+                });
+            }
         }
     }
 };

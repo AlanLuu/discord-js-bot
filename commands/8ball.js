@@ -8,7 +8,14 @@ module.exports = {
             option.setName("question")
                 .setDescription("The question to ask the magic 8-ball.")
                 .setRequired(true)),
-    async execute(interaction) {
+    async execute(interaction, { argsStr, prefix } = {}) {
+        if (argsStr?.length === 0) {
+            await interaction.replyWithoutPing({
+                content: `Usage: ${prefix}8ball <question>`,
+                ephemeral: true
+            });
+            return;
+        }
         const responses = [
             "It is certain.",
             "It is decidedly so.",
@@ -34,8 +41,8 @@ module.exports = {
             "Absolutely not.",
             "Do not even think about it."
         ];
-        const input = interaction.options.getString("question");
+        const input = argsStr ?? interaction.options.getString("question");
         const response = responses[Math.floor(Math.random() * responses.length)];
-        await interaction.reply(`**Question:** ${input}\n**Answer:** ${response}`);
+        await interaction.replyWithoutPing(`**Question:** ${input}\n**Answer:** ${response}`);
     }
 };
