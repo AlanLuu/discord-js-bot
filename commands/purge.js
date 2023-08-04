@@ -57,30 +57,27 @@ module.exports = {
         let purgeUser;
         let purgeChannel;
         if (argsArr) {
-            purgeUser = interaction.client.users.cache.get(argsArr[0].replace(/<@!?(\d+)>/, "$1"));
-            if (!purgeUser) {
+            try {
+                purgeUser = await interaction.guild.members.fetch(argsArr[0].replace(/<@!?(\d+)>/, "$1"));
+            } catch (e) {
                 await interaction.replyWithoutPing(`:x: User ${argsArr[0]} not found.`);
                 return;
             }
             const channelID = argsArr[1]?.replace(/<#(\d+)>/, "$1");
-            if (!channelID) {
-                purgeChannel = interaction.channel;
-            } else {
+            if (channelID) {
                 purgeChannel = interaction.client.channels.cache.get(channelID);
                 if (!purgeChannel) {
                     await interaction.replyWithoutPing(`:x: Channel ${channelID} not found.`);
                     return;
                 }
+            } else {
+                purgeChannel = interaction.channel;
             }
         } else {
             purgeUser = interaction.options.getUser("user");
             purgeChannel = interaction.options.getChannel("channel") ?? interaction.channel;
         }
 
-        if (!purgeChannel.permissionsFor(interaction.client.user).has(PermissionFlagsBits.ViewChannel)) {
-            await interaction.replyWithoutPing(":x: I do not have permission to view the channel you specified.");
-            return;
-        }
         if (
             purgeChannel instanceof VoiceChannel ||
             purgeChannel instanceof StageChannel ||
@@ -89,6 +86,11 @@ module.exports = {
             await interaction.replyWithoutPing(`:x: The channel ${purgeChannel} is not a text channel.`);
             return;
         }
+        if (!purgeChannel.permissionsFor(interaction.client.user).has(PermissionFlagsBits.ViewChannel)) {
+            await interaction.replyWithoutPing(":x: I do not have permission to view the channel you specified.");
+            return;
+        }
+        
         const numMessagesPurged = await this.purgeMessages(purgeUser, purgeChannel);
         const response = numMessagesPurged === 0
             ? `:x: Failed to purge messages from ${purgeUser} in ${purgeChannel}. This could be because the user has no messages in the specified channel, or all messages from the user in the channel are older than 14 days.`
