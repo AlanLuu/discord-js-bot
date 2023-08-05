@@ -3,5 +3,6 @@
     "applicationId": "",
     "devIds": [],
     "guildId": "",
+    "devGuildId": "",
     "prefix": ""
 }

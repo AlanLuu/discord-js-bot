@@ -15,6 +15,11 @@ const client = new Client({
 const commandErrorMsg = "There was an error while executing this command. " +
     "If this issue persists, please contact the bot developer.";
 
+const createTimeStamp = () => new Date().toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "long"
+});
+
 const replyWithoutPing = event => async options => {
     const optionsObject = {
         allowedMentions: {
@@ -30,11 +35,7 @@ const replyWithoutPing = event => async options => {
 };
 
 client.once(Events.ClientReady, client => {
-    const timestamp = new Date().toLocaleString(undefined, {
-        dateStyle: "medium",
-        timeStyle: "long"
-    });
-    console.log(`[${timestamp}] Logged in successfully as ${client.user.tag}`);
+    console.log(`[${createTimeStamp()}] Logged in successfully as ${client.user.tag}`);
 });
 
 client.commands = require("./command-builder.js");
@@ -47,13 +48,17 @@ client.on(Events.MessageCreate, async message => {
                 .slice(prefix.length)
                 .trim();
             const args = messageContent.split(/ +/);
-            const command = message.client.commands.get(args.shift().toLowerCase());
-            if (command) {
+            const commandName = args.shift().toLowerCase();
+            const command = message.client.commands.get(commandName);
+            const isDevCommand = command?.isDevCommand;
+            if (command && (!isDevCommand || devIds.has(message.author.id))) {
                 await command.execute(message, {
                     argsArr: args,
                     argsStr: args.join(" "),
                     prefix: prefix
                 });
+            } else if (!isDevCommand) {
+                console.error(`[${createTimeStamp()}] No command matching ${commandName} was found.`);
             }
         } else if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
             const messageContent = message.content.toLowerCase();
@@ -74,11 +79,19 @@ client.on(Events.InteractionCreate, async interaction => {
 
     const command = interaction.client.commands.get(interaction.commandName);
     if (!command) {
-        console.error(`No command matching ${interaction.commandName} was found.`);
+        console.error(`[${createTimeStamp()}] No command matching ${interaction.commandName} was found.`);
         return;
     }
 
     interaction.replyWithoutPing = replyWithoutPing(interaction);
+    if (command.isDevCommand && !devIds.has(interaction.user.id)) {
+        await interaction.replyWithoutPing({
+            content: ":x: You are not allowed to use this command.",
+            ephemeral: true
+        });
+        return;
+    }
+    
     try {
         await command.execute(interaction);
     } catch (e) {
