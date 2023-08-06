@@ -1,4 +1,7 @@
 module.exports = {
+    bitwise: {
+        orArray: arr => arr.reduce((a, b) => a | b)
+    },
     random: {
         choice: arr => arr[Math.floor(Math.random() * arr.length)],
         int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
