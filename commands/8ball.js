@@ -10,10 +10,7 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction, { argsStr, prefix } = {}) {
         if (argsStr?.length === 0) {
-            await interaction.replyWithoutPing({
-                content: `Usage: ${prefix}8ball <question>`,
-                ephemeral: true
-            });
+            await interaction.replyWithoutPing(`Usage: ${prefix}8ball <question>`);
             return;
         }
         const responses = [

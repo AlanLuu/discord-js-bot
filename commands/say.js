@@ -11,10 +11,7 @@ module.exports = {
     isDevCommand: true,
     async execute(interaction, { argsStr, prefix } = {}) {
         if (argsStr?.length === 0) {
-            await interaction.replyWithoutPing({
-                content: `Usage: ${prefix}say <input>`,
-                ephemeral: true
-            });
+            await interaction.replyWithoutPing(`Usage: ${prefix}say <input>`);
             return;
         }
         const input = argsStr ?? interaction.options.getString("input");

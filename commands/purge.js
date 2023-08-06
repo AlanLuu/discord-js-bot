@@ -42,10 +42,7 @@ module.exports = {
         }
 
         if (argsArr?.length === 0) {
-            await interaction.replyWithoutPing({
-                content: `Usage: ${prefix}purge <user> [channel]`,
-                ephemeral: true
-            });
+            await interaction.replyWithoutPing(`Usage: ${prefix}purge <user> [channel]`);
             return;
         }
 

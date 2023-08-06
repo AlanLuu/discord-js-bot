@@ -10,10 +10,7 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction, { argsStr, prefix } = {}) {
         if (argsStr?.length === 0) {
-            await interaction.replyWithoutPing({
-                content: `Usage: ${prefix}pick <item1>, <item2>, ...`,
-                ephemeral: true
-            });
+            await interaction.replyWithoutPing(`Usage: ${prefix}pick <item1>, <item2>, ...`);
             return;
         }
         const list = (argsStr ?? interaction.options.getString("list"))
