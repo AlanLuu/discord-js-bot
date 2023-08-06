@@ -36,7 +36,7 @@ const rest = new REST().setToken(token);
                     body: commands
                 },
             );
-            console.log(`Successfully deployed ${data.length} application (/) commands. to all guilds.`);
+            console.log(`Successfully deployed ${data.length} application (/) commands to all guilds.`);
         }
     } catch (e) {
         console.error(e);
