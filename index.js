@@ -1,4 +1,5 @@
 const { Client, Events, GatewayIntentBits } = require("discord.js");
+const { timestamp } = require("./util.js");
 const { devIds: devIdArr, prefix, token } = require("./config.json");
 const devIds = new Set(devIdArr); //Convert to a set for faster lookup times
 
@@ -15,11 +16,6 @@ const client = new Client({
 const commandErrorMsg = "There was an error while executing this command. " +
     "If this issue persists, please contact the bot developer.";
 
-const createTimeStamp = () => new Date().toLocaleString(undefined, {
-    dateStyle: "medium",
-    timeStyle: "long"
-});
-
 const replyWithoutPing = event => async options => {
     const optionsObject = {
         allowedMentions: {
@@ -35,7 +31,7 @@ const replyWithoutPing = event => async options => {
 };
 
 client.once(Events.ClientReady, client => {
-    console.log(`[${createTimeStamp()}] Logged in successfully as ${client.user.tag}`);
+    timestamp.log(`Logged in successfully as ${client.user.tag}`);
 });
 
 client.commands = require("./command-builder.js");
@@ -58,7 +54,7 @@ client.on(Events.MessageCreate, async message => {
                     prefix: prefix
                 });
             } else if (!isDevCommand) {
-                console.error(`[${createTimeStamp()}] No command matching ${commandName} was found.`);
+                timestamp.error(`No command matching ${commandName} was found.`);
             }
         } else if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
             const messageContent = message.content.toLowerCase();
@@ -79,7 +75,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
     const command = interaction.client.commands.get(interaction.commandName);
     if (!command) {
-        console.error(`[${createTimeStamp()}] No command matching ${interaction.commandName} was found.`);
+        timestamp.error(`No command matching ${interaction.commandName} was found.`);
         return;
     }
 
