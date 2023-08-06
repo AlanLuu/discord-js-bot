@@ -1,4 +1,8 @@
 module.exports = {
+    random: {
+        choice: arr => arr[Math.floor(Math.random() * arr.length)],
+        int: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+    },
     timestamp: {
         create: () => new Date().toLocaleString(undefined, {
             dateStyle: "medium",

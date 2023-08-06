@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { random } = require("../util.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,7 +40,7 @@ module.exports = {
             "Do not even think about it."
         ];
         const input = argsStr ?? interaction.options.getString("question");
-        const response = responses[Math.floor(Math.random() * responses.length)];
+        const response = random.choice(responses);
         await interaction.replyWithoutPing(`**Question:** ${input}\n**Answer:** ${response}`);
     }
 };

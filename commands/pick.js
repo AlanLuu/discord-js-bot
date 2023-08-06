@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { random } = require("../util.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,7 +24,7 @@ module.exports = {
             });
             return;
         }
-        const pick = list[Math.floor(Math.random() * list.length)];
+        const pick = random.choice(list);
         const listStr = list.join(", ");
         if (argsStr) {
             await interaction.replyWithoutPing(`I randomly picked: **${pick}**`);

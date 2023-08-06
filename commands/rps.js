@@ -5,6 +5,7 @@ const {
     SlashCommandBuilder
 } = require("discord.js");
 
+const { random } = require("../util.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("rps")
@@ -37,7 +38,7 @@ module.exports = {
 
         const playRps = async (confirmation, playerChoice) => {
             const choices = ["rock", "paper", "scissors"];
-            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+            const computerChoice = random.choice(choices);
             let replyStr = `You chose **${playerChoice}**! I chose **${computerChoice}**!\n`;
             if (playerChoice === computerChoice) {
                 replyStr += "It's a tie!";

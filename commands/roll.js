@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { random } = require("../util.js");
 
 const minimumDiceSides = 2;
 const defaultDiceSides = 6;
@@ -28,7 +29,7 @@ module.exports = {
             await interaction.replyWithoutPing(`You can't roll a die with less than ${minimumDiceSides} sides.`);
             return;
         }
-        const roll = Math.floor(Math.random() * sides) + 1;
+        const roll = random.int(1, sides);
         await interaction.replyWithoutPing(`Rolled a D${sides} and got **${roll}**.`);
     }
 };
