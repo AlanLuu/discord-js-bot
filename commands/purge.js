@@ -6,8 +6,8 @@ const {
     VoiceChannel
 } = require("discord.js");
 
-const { bitwise: { orArray } } = require("../util.js");
-const perms = [
+const { bitwise: { orArray }, perms } = require("../util.js");
+const permsArr = [
     PermissionFlagsBits.ManageMessages,
     PermissionFlagsBits.BanMembers
 ];
@@ -25,8 +25,8 @@ module.exports = {
             .setDescription("The channel to purge messages from, purges from the current channel if not specified")
             .setRequired(false)
         )
-        .setDefaultMemberPermissions(orArray(perms)),
-    perms,
+        .setDefaultMemberPermissions(orArray(permsArr)),
+    perms: permsArr,
     async purgeMessages(user, channel) {
         const messages = await channel.messages.fetch();
         const messagesToDelete = messages
@@ -39,7 +39,7 @@ module.exports = {
         return 0;
     },
     async execute(interaction, { argsArr, prefix } = {}) {
-        if (argsArr && !perms.every(perm => interaction.member.permissions.has(perm))) {
+        if (argsArr && !perms.hasAll(interaction.member, permsArr)) {
             return;
         }
 
