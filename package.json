@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "delete-commands": "node delete-commands.js",
+    "delete-commands-all": "node delete-commands.js && node delete-commands-dev.js",
     "delete-commands-dev": "node delete-commands-dev.js",
     "deploy-commands": "node deploy-commands.js",
+    "deploy-commands-all": "node deploy-commands.js && node deploy-commands-dev.js",
     "deploy-commands-dev": "node deploy-commands-dev.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
