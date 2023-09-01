@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "delete-commands": "node delete-commands.js",
+    "delete-commands-dev": "node delete-commands-dev.js",
     "deploy-commands": "node deploy-commands.js",
     "deploy-commands-dev": "node deploy-commands-dev.js",
     "start": "node index.js",
