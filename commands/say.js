@@ -1,13 +1,15 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("say")
         .setDescription("(Dev command) Replies with your input.")
-        .addStringOption(option => 
-            option.setName("input")
-                .setDescription("The input to reply back with.")
-                .setRequired(true)),
+        .addStringOption(option => option
+            .setName("input")
+            .setDescription("The input to reply back with.")
+            .setRequired(true)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     isDevCommand: true,
     async execute(interaction, { argsStr, prefix } = {}) {
         if (argsStr?.length === 0) {
