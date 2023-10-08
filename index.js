@@ -56,13 +56,6 @@ client.on(Events.MessageCreate, async message => {
             } else if (!isDevCommand) {
                 timestamp.error(`No command matching ${commandName} was found.`);
             }
-        } else if (message.mentions.has(client.user) && devIds.has(message.author.id)) {
-            const messageContent = message.content.toLowerCase();
-            if (messageContent.includes("ping")) {
-                await message.replyWithoutPing("Pong!");
-            } else {
-                await message.reply(`Hello ${message.author}`);
-            }
         }
     } catch (e) {
         console.error(e);
